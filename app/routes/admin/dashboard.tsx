@@ -1,20 +1,25 @@
 import { Header, StatCard, TripCard } from "components"
+import type { Route } from "./+types/dashboard";
 import { allTrips, dashboardStats, user } from "~/constants";
+import { getUser } from "~/appwrite/auth";
 
 
+//pre fetch data form from the browser only.
+export const clientLoader = async () => await getUser();
 
+const dashboard = ({ loaderData }: Route.ComponentProps) => {
+  const user = loaderData as User | null;
 
-const dashboard = () => {
-  
+  const { totalUsers, usersJoined, totalTrips, tripsCreated, userRole } =
+    dashboardStats;
 
-  const { totalUsers, usersJoined, totalTrips, tripsCreated, userRole } = dashboardStats;
   return (
     <main className="dashboard wrapper">
       <Header
         title={`Welcome ${user?.name ?? "Guest"}`}
         description="Track activity, trends and popular destinations in real time"
       />
-      Dashboard Page Contents
+    
       <section className="flex flex-col gap-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
           <StatCard
@@ -52,13 +57,14 @@ const dashboard = () => {
                 travelStyle,
                 estimatedPrice,
               }) => (
-                <TripCard key={id}
-                   id={id.toString()}
-                   name = {name}
-                   imageUrl={imageUrls[0]}
-                   location={itinerary?.[0]?.location ?? ''}
-                   tags = {tags} 
-                   price = {estimatedPrice}
+                <TripCard
+                  key={id}
+                  id={id.toString()}
+                  name={name}
+                  imageUrl={imageUrls[0]}
+                  location={itinerary?.[0]?.location ?? ""}
+                  tags={tags}
+                  price={estimatedPrice}
                 />
               )
             )}
@@ -66,6 +72,6 @@ const dashboard = () => {
       </section>
     </main>
   );
-}
+};
 
 export default dashboard
