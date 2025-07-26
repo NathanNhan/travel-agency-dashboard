@@ -3,7 +3,6 @@ import {
   GridComponent,
   ColumnsDirective,
   ColumnDirective,
-  distinctStringValues,
 } from "@syncfusion/ej2-react-grids";
 
 import { cn, formatDate } from "~/lib/utils";

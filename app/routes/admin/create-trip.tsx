@@ -86,7 +86,7 @@ const createTrip = ({ loaderData } : Route.ComponentProps) => {
            const result: CreateTripResponse = await response.json();
 
            if(result?.id) {
-            navigate('`/trips/${result.id');
+             navigate(`/trips/${result.id}`);
            } else {
             console.error('Failed to generate the trip!');
            }

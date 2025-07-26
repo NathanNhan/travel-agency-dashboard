@@ -2,13 +2,25 @@ import { Header, StatCard, TripCard } from "components"
 import type { Route } from "./+types/dashboard";
 import { allTrips, dashboardStats, user } from "~/constants";
 import { getUser } from "~/appwrite/auth";
+import { getUsersAndTripsStats } from "~/appwrite/dashboard";
 
 
 //pre fetch data form from the browser only.
-export const clientLoader = async () => await getUser();
+export const clientLoader = async () => {
+  const [ user, dashboardStats ] = await Promise.all([ 
+    await getUser(),
+    await getUsersAndTripsStats()
+  ]);
+
+  return {
+    user, 
+    dashboardStats
+  }
+};
 
 const dashboard = ({ loaderData }: Route.ComponentProps) => {
-  const user = loaderData as User | null;
+  const user = loaderData.user as User | null;
+  const { dashboardStats } = loaderData;
 
   const { totalUsers, usersJoined, totalTrips, tripsCreated, userRole } =
     dashboardStats;
